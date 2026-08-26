@@ -1,0 +1,47 @@
+{
+  "name": "git-glance",
+  "version": "0.1.0",
+  "description": "Zero-config CLI that turns git diffs into ELI5 summaries and interactive Mermaid architecture diagrams.",
+  "keywords": [
+    "git",
+    "diff",
+    "cli",
+    "mermaid",
+    "llm"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "git-glance": "./bin/git-glance.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "bin",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsx src/index.ts",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "commander": "15.0.0",
+    "open": "11.0.1",
+    "openai": "7.6.0",
+    "ora": "9.4.1",
+    "picocolors": "1.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "26.3.0",
+    "tsup": "8.5.1",
+    "tsx": "4.21.0",
+    "typescript": "5.9.3"
+  }
+}
