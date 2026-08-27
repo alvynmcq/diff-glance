@@ -77,7 +77,7 @@ async function runGlance(
   try {
     spinner = ora({ text: "diff-glance: analyzing diff...", color: "cyan", spinner: "dots" }).start();
 
-    const payload = await extractDiff({
+    let payload = await extractDiff({
       cwd: process.cwd(),
       staged: opts.staged,
       commit: opts.commit,
@@ -86,9 +86,27 @@ async function runGlance(
       maxChars,
     });
 
+    const defaultRange = !opts.staged && !opts.commit && !from && !to;
+    if (payload.files.length === 0 && defaultRange) {
+      spinner.text = "diff-glance: worktree clean, analyzing HEAD...";
+      try {
+        payload = await extractDiff({
+          cwd: process.cwd(),
+          staged: false,
+          commit: "HEAD",
+          maxChars,
+        });
+      } catch {
+        payload = { ...payload, files: [] };
+      }
+    }
+
     if (payload.files.length === 0) {
       spinner.stop();
       console.error("diff-glance: no changes to analyze");
+      if (defaultRange) {
+        console.error("diff-glance: try a range, e.g. diff-glance --commit HEAD");
+      }
       return;
     }
 

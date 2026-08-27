@@ -13,7 +13,7 @@ npx diff-glance
 npx diff-glance origin/main HEAD
 ```
 
-Requires Node.js 18+, `git` on `PATH`, and an OpenAI-compatible API key (or a local Ollama endpoint). Default range is `HEAD` vs the worktree (staged + unstaged + untracked). The second command diffs two refs. There is no stdin pipe.
+Requires Node.js 18+, `git` on `PATH`, and an OpenAI-compatible API key (or a local Ollama endpoint). Default range is `HEAD` vs the worktree (staged + unstaged + untracked). If the worktree is clean, that falls back to `--commit HEAD`. The second command diffs two refs. There is no stdin pipe.
 
 ## What you get
 
@@ -25,32 +25,11 @@ diff-glance: viewer at http://127.0.0.1:53102
 diff-glance: press Ctrl+C to stop
 ```
 
-The local viewer (bound to `127.0.0.1`) opens in your browser. Typical payload:
+The local viewer (bound to `127.0.0.1`) opens in your browser:
 
-**ELI5** — Auth now lives in its own module. Login used to sit inside the HTTP handler; this split lets the API and CLI share the same session checks.
-
-**Impact** — Call sites that imported `handleRequest` for auth need `createSession` from `src/auth.ts`. Risk: medium.
-
-```mermaid
-flowchart TD
-  subgraph ui["CLI"]
-    Index["src/index.ts"]:::modified
-  end
-  subgraph api["Analysis"]
-    Diff["src/diff.ts"]:::modified
-    AI["src/ai.ts"]:::added
-  end
-  subgraph view["Viewer"]
-    Server["src/server.ts"]:::modified
-    Template["src/template.html"]:::modified
-  end
-  Index --> Diff
-  Index --> AI
-  Index --> Server
-  Server --> Template
-  classDef added fill:#14532d,stroke:#16a34a,color:#dcfce7
-  classDef modified fill:#78350f,stroke:#d97706,color:#fef3c7
-```
+<p align="center">
+  <img src="docs/images/viewer.png" alt="diff-glance local viewer with ELI5 summary, architecture diagram, and file notes" width="900" />
+</p>
 
 Use `--json` to print the same analysis to stdout, or `-o report.html` to write the HTML file instead of serving it.
 
