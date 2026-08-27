@@ -27,14 +27,14 @@ const DEFAULT_MAX_CHARS = 80_000;
 
 async function main(): Promise<void> {
   const program = new Command()
-    .name("git-glance")
+    .name("diff-glance")
     .description("Turn a git diff into an ELI5 summary and a Mermaid architecture diagram.")
     .version("0.1.0")
     .argument("[from]", "Base git ref")
     .argument("[to]", "Head git ref")
     .option("-s, --staged", "Analyze staged changes only", false)
     .option("-c, --commit <sha>", "Analyze a specific commit")
-    .option("-m, --model <id>", "Model id (or GIT_GLANCE_MODEL)")
+    .option("-m, --model <id>", "Model id (or DIFF_GLANCE_MODEL)")
     .option("--base-url <url>", "OpenAI-compatible API base URL")
     .option("--api-key <key>", "API key (or OPENAI_API_KEY)")
     .option("-p, --port <n>", "Viewer port (0 = ephemeral)", "0")
@@ -48,14 +48,14 @@ async function main(): Promise<void> {
       [
         "",
         "Examples:",
-        "  $ git-glance",
-        "  $ git-glance --staged",
-        "  $ git-glance main",
-        "  $ git-glance main HEAD",
-        "  $ git-glance --commit HEAD",
-        "  $ git-glance --json",
-        "  $ git-glance --model gemini-3.6-flash",
-        "  $ git-glance --base-url http://127.0.0.1:11434/v1 --model llama3.2",
+        "  $ diff-glance",
+        "  $ diff-glance --staged",
+        "  $ diff-glance main",
+        "  $ diff-glance main HEAD",
+        "  $ diff-glance --commit HEAD",
+        "  $ diff-glance --json",
+        "  $ diff-glance --model gemini-3.6-flash",
+        "  $ diff-glance --base-url http://127.0.0.1:11434/v1 --model llama3.2",
       ].join("\n"),
     )
     .action(async (from: string | undefined, to: string | undefined, opts: CliOptions) => {
@@ -75,7 +75,7 @@ async function runGlance(
   let spinner: Ora | undefined;
 
   try {
-    spinner = ora({ text: "git-glance: analyzing diff...", color: "cyan", spinner: "dots" }).start();
+    spinner = ora({ text: "diff-glance: analyzing diff...", color: "cyan", spinner: "dots" }).start();
 
     const payload = await extractDiff({
       cwd: process.cwd(),
@@ -88,7 +88,7 @@ async function runGlance(
 
     if (payload.files.length === 0) {
       spinner.stop();
-      console.error("git-glance: no changes to analyze");
+      console.error("diff-glance: no changes to analyze");
       return;
     }
 
@@ -98,7 +98,7 @@ async function runGlance(
       model: opts.model,
     });
 
-    spinner.text = "git-glance: generating summary...";
+    spinner.text = "diff-glance: generating summary...";
     const analysis = await analyzeDiff(payload, {
       apiKey: opts.apiKey,
       baseUrl: opts.baseUrl,
@@ -128,10 +128,10 @@ async function runGlance(
 
     if (opts.output) {
       const outputPath = resolve(opts.output);
-      spinner.text = "git-glance: writing report...";
+      spinner.text = "diff-glance: writing report...";
       await writeHtmlFile(view, outputPath);
       spinner.stop();
-      console.error(pc.dim(`git-glance: wrote ${outputPath}`));
+      console.error(pc.dim(`diff-glance: wrote ${outputPath}`));
       if (opts.open) {
         await open(outputPath);
       }
@@ -179,8 +179,8 @@ function formatError(error: unknown): string {
 }
 
 main().catch((error: unknown) => {
-  console.error(pc.red(`git-glance: ${formatError(error)}`));
-  if (process.env.GIT_GLANCE_DEBUG) {
+  console.error(pc.red(`diff-glance: ${formatError(error)}`));
+  if (process.env.DIFF_GLANCE_DEBUG) {
     console.error(error);
   }
   process.exit(1);

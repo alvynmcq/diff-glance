@@ -1,7 +1,15 @@
 {
-  "name": "git-glance",
+  "name": "diff-glance",
   "version": "0.1.0",
   "description": "Zero-config CLI that turns git diffs into ELI5 summaries and interactive Mermaid architecture diagrams.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alvynmcq/diff-glance.git"
+  },
+  "homepage": "https://github.com/alvynmcq/diff-glance#readme",
+  "bugs": {
+    "url": "https://github.com/alvynmcq/diff-glance/issues"
+  },
   "keywords": [
     "git",
     "diff",
@@ -12,7 +20,7 @@
   "license": "MIT",
   "type": "module",
   "bin": {
-    "git-glance": "./bin/git-glance.js"
+    "diff-glance": "./bin/diff-glance.js"
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

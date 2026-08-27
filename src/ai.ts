@@ -61,13 +61,13 @@ const KINDS = new Set<ChangeKind>(["added", "modified", "deleted", "renamed"]);
 export function resolveLlmConfig(options: AnalyzeOptions): LlmConfig {
   const baseURL =
     emptyToUndef(options.baseUrl) ??
-    emptyToUndef(process.env.GIT_GLANCE_BASE_URL) ??
+    emptyToUndef(process.env.DIFF_GLANCE_BASE_URL) ??
     emptyToUndef(process.env.OPENAI_BASE_URL) ??
     detectBaseUrl();
 
   const apiKey =
     emptyToUndef(options.apiKey) ??
-    emptyToUndef(process.env.GIT_GLANCE_API_KEY) ??
+    emptyToUndef(process.env.DIFF_GLANCE_API_KEY) ??
     emptyToUndef(process.env.OPENAI_API_KEY) ??
     emptyToUndef(process.env.OPENROUTER_API_KEY) ??
     emptyToUndef(process.env.GROQ_API_KEY) ??
@@ -84,7 +84,7 @@ export function resolveLlmConfig(options: AnalyzeOptions): LlmConfig {
 
   const model =
     emptyToUndef(options.model) ??
-    emptyToUndef(process.env.GIT_GLANCE_MODEL) ??
+    emptyToUndef(process.env.DIFF_GLANCE_MODEL) ??
     emptyToUndef(process.env.OPENAI_MODEL) ??
     defaultModel(baseURL);
 
@@ -319,8 +319,8 @@ function openRouterHeaders(baseURL: string | undefined): Record<string, string> 
     return undefined;
   }
   return {
-    "HTTP-Referer": "https://github.com/git-glance/git-glance",
-    "X-Title": "git-glance",
+    "HTTP-Referer": "https://github.com/alvynmcq/diff-glance",
+    "X-Title": "diff-glance",
   };
 }
 

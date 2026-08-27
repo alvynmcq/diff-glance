@@ -1,16 +1,16 @@
-# git-glance
+# diff-glance
 
-[![npm](https://img.shields.io/npm/v/git-glance.svg)](https://www.npmjs.com/package/git-glance)
+[![npm](https://img.shields.io/npm/v/diff-glance.svg)](https://www.npmjs.com/package/diff-glance)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 Turn messy git diffs into plain-English summaries and architecture diagrams.
 
 ```bash
-npx git-glance
+npx diff-glance
 ```
 
 ```bash
-npx git-glance origin/main HEAD
+npx diff-glance origin/main HEAD
 ```
 
 Requires Node.js 18+, `git` on `PATH`, and an OpenAI-compatible API key (or a local Ollama endpoint). Default range is `HEAD` vs the worktree (staged + unstaged + untracked). The second command diffs two refs. There is no stdin pipe.
@@ -18,11 +18,11 @@ Requires Node.js 18+, `git` on `PATH`, and an OpenAI-compatible API key (or a lo
 ## What you get
 
 ```text
-$ git-glance
-git-glance: analyzing diff...
-git-glance: generating summary...
-git-glance: viewer at http://127.0.0.1:53102
-git-glance: press Ctrl+C to stop
+$ diff-glance
+diff-glance: analyzing diff...
+diff-glance: generating summary...
+diff-glance: viewer at http://127.0.0.1:53102
+diff-glance: press Ctrl+C to stop
 ```
 
 The local viewer (bound to `127.0.0.1`) opens in your browser. Typical payload:
@@ -76,7 +76,7 @@ Use `--json` to print the same analysis to stdout, or `-o report.html` to write 
 
 Anthropic is not a native SDK path. Route it through OpenRouter (`--model anthropic/claude-sonnet-4`) or any other OpenAI-compatible gateway. Vertex AI works the same way: pass its OpenAI-compatible `--base-url`.
 
-If more than one key is set, resolution order is: `--api-key` → `GIT_GLANCE_API_KEY` → `OPENAI_API_KEY` → `OPENROUTER_API_KEY` → `GROQ_API_KEY` → `GEMINI_API_KEY` / `GOOGLE_API_KEY` / `GOOGLE_GENERATIVE_AI_API_KEY`. A dummy key of `ollama` is used only when the base URL is local and no other key is present.
+If more than one key is set, resolution order is: `--api-key` → `DIFF_GLANCE_API_KEY` → `OPENAI_API_KEY` → `OPENROUTER_API_KEY` → `GROQ_API_KEY` → `GEMINI_API_KEY` / `GOOGLE_API_KEY` / `GOOGLE_GENERATIVE_AI_API_KEY`. A dummy key of `ollama` is used only when the base URL is local and no other key is present.
 
 ### CLI
 
@@ -96,11 +96,11 @@ If more than one key is set, resolution order is: `--api-key` → `GIT_GLANCE_AP
 | `-o, --output <file>` | Write HTML to a file instead of serving. |
 
 ```bash
-git-glance --staged
-git-glance --commit HEAD
-git-glance --json
-git-glance -o glance.html --no-open
-git-glance --base-url http://127.0.0.1:11434/v1 --model llama3.2
+diff-glance --staged
+diff-glance --commit HEAD
+diff-glance --json
+diff-glance -o glance.html --no-open
+diff-glance --base-url http://127.0.0.1:11434/v1 --model llama3.2
 ```
 
 ### Environment
@@ -110,13 +110,13 @@ git-glance --base-url http://127.0.0.1:11434/v1 --model llama3.2
 | `OPENAI_API_KEY` | OpenAI key (also used as a generic key if you set a custom base URL). |
 | `OPENAI_BASE_URL` | OpenAI-compatible base URL. |
 | `OPENAI_MODEL` | Model id fallback. |
-| `GIT_GLANCE_API_KEY` | Overrides other keys except `--api-key`. |
-| `GIT_GLANCE_BASE_URL` | Overrides `OPENAI_BASE_URL`. |
-| `GIT_GLANCE_MODEL` | Overrides `OPENAI_MODEL`. |
+| `DIFF_GLANCE_API_KEY` | Overrides other keys except `--api-key`. |
+| `DIFF_GLANCE_BASE_URL` | Overrides `OPENAI_BASE_URL`. |
+| `DIFF_GLANCE_MODEL` | Overrides `OPENAI_MODEL`. |
 | `OPENROUTER_API_KEY` | Selects OpenRouter. |
 | `GROQ_API_KEY` | Selects Groq. |
 | `GEMINI_API_KEY` / `GOOGLE_API_KEY` / `GOOGLE_GENERATIVE_AI_API_KEY` | Selects Gemini. |
-| `GIT_GLANCE_DEBUG` | If set, print the raw error after the one-line stderr message. |
+| `DIFF_GLANCE_DEBUG` | If set, print the raw error after the one-line stderr message. |
 
 `--base-url` and `--model` beat the env vars. There is no `AI_BASE_URL` or `AI_MODEL`.
 
@@ -129,13 +129,13 @@ Cloud providers receive the truncated unified diff (lockfiles and binaries alrea
 ## Development
 
 ```bash
-git clone https://github.com/alvynmcq/git-glance.git
-cd git-glance
+git clone https://github.com/alvynmcq/diff-glance.git
+cd diff-glance
 npm install
 npm run dev
 ```
 
-`npm run dev` runs `tsx src/index.ts`. `npm run build` emits `dist/` for `node bin/git-glance.js`. `npm run typecheck` runs `tsc --noEmit`.
+`npm run dev` runs `tsx src/index.ts`. `npm run build` emits `dist/` for `node bin/diff-glance.js`. `npm run typecheck` runs `tsc --noEmit`.
 
 ## License
 

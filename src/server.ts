@@ -57,8 +57,8 @@ export async function startViewer(view: GlanceView, options: ServeOptions): Prom
 
   const port = await listen(server, options.host, options.port);
   const url = `http://${options.host}:${port}`;
-  console.error(pc.dim(`git-glance: viewer at ${url}`));
-  console.error(pc.dim("git-glance: press Ctrl+C to stop"));
+  console.error(pc.dim(`diff-glance: viewer at ${url}`));
+  console.error(pc.dim("diff-glance: press Ctrl+C to stop"));
 
   if (options.openBrowser) {
     await open(url);
